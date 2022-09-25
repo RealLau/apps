@@ -21,9 +21,10 @@ interface TableProps {
   legend?: React.ReactNode;
   noBodyTag?: boolean;
   withCollapsibleRows: boolean;
+  search?: React.ReactNode | false;
 }
 
-function extractBodyChildren (children: React.ReactNode): [boolean, React.ReactNode] {
+function extractBodyChildren(children: React.ReactNode): [boolean, React.ReactNode] {
   if (!Array.isArray(children)) {
     return [!children, children];
   }
@@ -34,13 +35,29 @@ function extractBodyChildren (children: React.ReactNode): [boolean, React.ReactN
   return [isEmpty, isEmpty ? null : kids];
 }
 
-function Table ({ children, className = '', empty, emptySpinner, filter, footer, header, isFixed, isInline, legend, noBodyTag, withCollapsibleRows = false }: TableProps): React.ReactElement<TableProps> {
+function Table({
+                 children,
+                 className = '',
+                 empty,
+                 emptySpinner,
+                 filter,
+                 footer,
+                 header,
+                 isFixed,
+                 isInline,
+                 legend,
+                 noBodyTag,
+                 withCollapsibleRows = false,
+                 search
+               }: TableProps): React.ReactElement<TableProps> {
   const [isEmpty, bodyChildren] = extractBodyChildren(children);
-
+  const searchBox = search || false
   return (
     <div className={`ui--Table ${className}`}>
+      {searchBox}
       {legend}
-      <table className={`${(isFixed && !isEmpty) ? 'isFixed' : 'isNotFixed'} ${isInline ? 'isInline' : ''} highlight--bg-faint${withCollapsibleRows ? ' withCollapsibleRows' : ''}`}>
+      <table
+        className={`${(isFixed && !isEmpty) ? 'isFixed' : 'isNotFixed'} ${isInline ? 'isInline' : ''} highlight--bg-faint${withCollapsibleRows ? ' withCollapsibleRows' : ''}`}>
         <Head
           filter={filter}
           header={header}
